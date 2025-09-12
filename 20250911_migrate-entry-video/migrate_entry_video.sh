@@ -85,6 +85,9 @@ while true; do
   LAST_ID=$(tail -n 1 "${TEMP_FILE}" | sed -e 's/INSERT IGNORE INTO .* VALUES(//' -e 's/);$//' | cut -d ',' -f 2 | tr -d '\r')
   RECORDS_PROCESSED=$((RECORDS_PROCESSED + LINES))
 
+  echo "1秒待機..."
+  sleep 1s
+
 done
 
 echo "--- 移行処理が完了しました。総レコード数: ${RECORDS_PROCESSED} ---"
