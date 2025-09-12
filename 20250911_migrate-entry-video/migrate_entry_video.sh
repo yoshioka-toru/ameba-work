@@ -30,7 +30,7 @@ DEST_TABLE_NAME=${DEST_TABLE_NAME}
 COLUMN_NAMES="BLOG_ID, ENTRY_ID, ENTRY_CREATED_DATETIME, VIDEO_JSON"
 
 # 設定: 移行パラメータ
-CHUNK_SIZE=10                  # 1回の処理で移行するレコード数
+CHUNK_SIZE=1000                # 1回の処理で移行するレコード数
 PRIMARY_KEY="entry_id"         # チャンクを分割するための主キーのカラム名
 
 # 一時ファイルのパス
