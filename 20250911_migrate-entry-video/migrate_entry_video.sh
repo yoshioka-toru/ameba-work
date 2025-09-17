@@ -66,8 +66,10 @@ while true; do
     sed 's/\[/\'\''[/g' | \
     sed 's/\]/\']\''/g' > "${TEMP_FILE}"
 
-  # 空の行を削除
-  sed -i '/^$/d' "${TEMP_FILE}"
+  # 2行目移行を置換
+  sed -i '' "2,\$s|INSERT IGNORE INTO ${DEST_DB_SCHEMA}.${DEST_TABLE_NAME} VALUES|,|g" "${TEMP_FILE}"
+  #　;を置換
+  sed -i '' '$!s/;//g' "${TEMP_FILE}"
 
   # エクスポートされた行数を確認
   LINES=$(wc -l < "${TEMP_FILE}")
@@ -82,7 +84,7 @@ while true; do
   mysql -h ${DEST_DB_HOST} -u ${DEST_DB_USER} -p${DEST_DB_PASS} "${DEST_DB_SCHEMA}" < "${TEMP_FILE}"
 
   # 最後のIDを取得して次のループの開始地点を設定
-  LAST_ID=$(tail -n 1 "${TEMP_FILE}" | sed -e 's/INSERT IGNORE INTO .* VALUES(//' -e 's/);$//' | cut -d ',' -f 2 | tr -d '\r')
+  LAST_ID=$(tail -n 1 "${TEMP_FILE}" | sed -e 's/,(//' -e 's/);$//' | cut -d ',' -f 2 | tr -d '\r')
   RECORDS_PROCESSED=$((RECORDS_PROCESSED + LINES))
 
   echo "1秒待機..."
